@@ -4,7 +4,7 @@
 
 **Browser diary is in development, use it at your risk!**
 
-You can try last development version right now 
+You can try [last development version here](https://peaceful-wave-47443.herokuapp.com/)
 
 ## Description
 
@@ -22,8 +22,9 @@ Following list will change in future, but for now is aim for a full 1.0 version:
  
 ## Principles
 
-KISS and YAGNI as coding guidelines
+KISS and YAGNI as coding guidelines.
+My aim is not to use latest version of any libray, but to create something useful for me.
 
 ## License
 
-Resting is under MIT license
+Browserdiary is under MIT license
