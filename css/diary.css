@@ -1,0 +1,17 @@
+/*
+ * Globals
+ */
+
+
+/*
+ * Base structure
+ */
+.diary-area {
+	font-family: "Arial", Helvetica;
+	font-size: 14.666666px;
+	color: #000000;
+	font-weight: 400;
+	font-style: normal;
+	font-variant: normal;
+	vertical-align: baseline;
+}
