@@ -1,1 +1,0 @@
-https://tempusdominus.github.io/bootstrap-4/Usage/#minimum-setup
