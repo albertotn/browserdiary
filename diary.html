@@ -140,8 +140,8 @@
 		if (lastDate === null || lastDate === undefined){
 			lastDate = new Date();	
 		}
-		$('#datetimepicker1').datetimepicker('date', moment(lastDate, 'DD/MM/YYYY') );
-		loadContent(lastDate);
+		$('#datetimepicker1').datetimepicker('date', moment(new Date(), 'DD/MM/YYYY') );
+		loadContent(new Date());
 	}
 	
 	function loadContent(lastDate){
