@@ -84,16 +84,23 @@
 		  <div class="col-xs-6 col-md-4">
 			<a href="#" class="next round" title="tomorrow" onclick="dateTomorrow()">&#8250;</a>	  
 		  </div>
-		</div>	
+		</div>
 	</div>
 	<div class="form-group">	
 		<textarea id="diaryArea" class="form-control diary-area" rows="20" cols="50" autofocus placeholder="Write your notes for today.."></textarea>
 	</div>
-	<div class="row">
-		<div id="savingIndicator" class="col-md-12">
-		Saving...
+	<div class="form-group">
+		<div class="row">
+		  <div class="col-xs-6 col-md-4">
+			<a href="#" class="previous round" title="previous entry" onclick="previousEntry()" >&#8249;</a>	  
+		  </div>
+		  <div id="savingIndicator" class="col-xs-6 col-md-4">
+			Saving...
+		  </div>
+		  <div class="col-xs-6 col-md-4">
+			<a href="#" class="next round" title="next entry" onclick="nextEntry()">&#8250;</a>	  
+		  </div>
 		</div>
-		<!-- <button id="saveButton" onclick="save()">save</button> -->
 	</div>	
 	</div>
 
@@ -125,13 +132,11 @@
 	
 	function dateYesterday(){
 		let yesterday = $('#datetimepicker1').datetimepicker('date').subtract(1,"days");
-		$('#datetimepicker1').datetimepicker('date',yesterday);
 		loadContent(yesterday.format("DD/MM/YYYY"))
 	}
 	
 	function dateTomorrow(){
 		let tomorrow = $('#datetimepicker1').datetimepicker('date').add(1,"days");
-		$('#datetimepicker1').datetimepicker('date',tomorrow);
 		loadContent(tomorrow.format("DD/MM/YYYY"))
 	}
 	
@@ -140,17 +145,81 @@
 		if (lastDate === null || lastDate === undefined){
 			lastDate = new Date();	
 		}
-		$('#datetimepicker1').datetimepicker('date', moment(new Date(), 'DD/MM/YYYY') );
 		loadContent(new Date());
 	}
 	
 	function loadContent(lastDate){
+		$('#datetimepicker1').datetimepicker('date',moment(lastDate,"DD/MM/YYYY"));	
 		var content = localStorage[lastDate];
 		if (content !== null && content !== undefined){
 			$("#diaryArea").val(content);
 		} else {
 			$("#diaryArea").val("");
 		}
+	}
+	
+	function changeEntry(dir){
+		if (dir === null || dir === undefined){
+			return;
+		}
+		if (localStorage === null || localStorage.length==0){
+			return;
+		}
+		var entries = diaryEntries();
+		if (entries === null || entries === undefined || entries.length==0){
+			console.log("no entries");
+			return;
+		}
+		if (entries.length==1){
+			loadContent(entries[0]);
+			return;
+		}
+		let entryIndex = getCurrentIndex();
+		if (entryIndex == null){
+			saveCurrentIndex(entries.length);
+			return;
+		}
+		let index = parseInt(entryIndex)+dir;
+		if (index <= 0){
+			saveCurrentIndex(0);
+			loadContent(entries[0]);			
+		} else if (index >= entries.length){
+			saveCurrentIndex( entries.length-1);
+			loadContent(entries[ entries.length-1]);					
+		} else {
+			saveCurrentIndex(index);
+			loadContent(entries[index]);
+		}
+	}
+	
+	function previousEntry(){
+		changeEntry(-1);
+	}
+	
+	function nextEntry(){
+		changeEntry(1);
+	}
+	
+	function getCurrentIndex(){
+		var content = localStorage["currentIndex"];
+		if (content !== null && content !== undefined){
+			return content;
+		} else {
+			return null;
+		}	
+	}
+	
+	function saveCurrentIndex(index){
+		localStorage["currentIndex"] = index;;
+	}	
+	
+	function diaryEntries(){
+		var tmp= Object.keys(localStorage).filter( k => moment(k,"DD/MM/YYYY").isValid() );
+		if (tmp==null || tmp === undefined){
+			return tmp;
+		}
+		let sortedArray = tmp.sort((a, b) => moment(a,"DD/MM/YYYY").unix() - moment(b,"DD/MM/YYYY").unix())
+		return sortedArray;
 	}
 	
 	function save(){
