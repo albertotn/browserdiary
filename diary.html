@@ -101,9 +101,17 @@
 			<a href="#" class="next round" title="next entry" onclick="nextEntry()">&#8250;</a>	  
 		  </div>
 		</div>
+		<div class="row">
+			<div class="col-xs-6 col-md-4">
+			</div>
+			<div class="col-xs-6 col-md-4">
+				<button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete diary</button>			
+			</div>			
+			<div class="col-xs-6 col-md-4">
+			</div>
+		</div>
 	</div>	
-	</div>
-
+  </div>
   </main>
 
   <footer class="mastfoot mt-auto">
@@ -229,6 +237,19 @@
 		var value = $("#diaryArea").val();
 		localStorage[lastDate] = value;
 		console.log("data saved")
+	}
+	
+	function confirmDelete(){
+		var txt;
+		var r = confirm("Attention! Are you sure to delete all your diary?");
+		if (r == true) {
+			var tmp= Object.keys(localStorage).filter( k => moment(k,"DD/MM/YYYY").isValid() );
+			if (tmp==null || tmp === undefined){
+				return ;
+			}
+			tmp.forEach( k => localStorage.removeItem(k));
+			loadFromStorage();
+		}	
 	}
 </script>
 </html>
