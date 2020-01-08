@@ -1,3 +1,5 @@
+![Browser diary icon](/img/appointment-book.png)
+
 # Your diary, in your browser
 
 ## Read before use!
@@ -28,3 +30,7 @@ My aim is not to use latest version of any libray, but to create something usefu
 ## License
 
 Browserdiary is under MIT license
+
+## Credits
+
+Favicon and icon by https://www.flaticon.com/authors/freepik
