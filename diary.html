@@ -103,11 +103,12 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-6 col-md-4">
+				<button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete diary</button>							
 			</div>
 			<div class="col-xs-6 col-md-4">
-				<button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete diary</button>			
-			</div>			
+			</div>						
 			<div class="col-xs-6 col-md-4">
+				<button type="button" class="btn btn-danger" onclick="exportDiary()">Export diary</button>							
 			</div>
 		</div>
 	</div>	
@@ -251,5 +252,20 @@
 			loadFromStorage();
 		}	
 	}
+
+	function exportDiary(){
+		var keys = Object.keys(localStorage).filter( k => moment(k,"DD/MM/YYYY").isValid() );
+		var exportObj = {};
+		keys.forEach( k => exportObj[k]=localStorage.getItem(k));
+		var exportName = "testExport";
+		var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+		var downloadAnchorNode = document.createElement('a');
+		downloadAnchorNode.setAttribute("href",     dataStr);
+		downloadAnchorNode.setAttribute("download", exportName + ".json");
+		document.body.appendChild(downloadAnchorNode); // required for firefox
+		downloadAnchorNode.click();
+		downloadAnchorNode.remove();
+	}
+
 </script>
 </html>
