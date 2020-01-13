@@ -40,6 +40,13 @@
     <link href="css/cover.css" rel="stylesheet">
 	<link href="css/arrows.css" rel="stylesheet">
 	<link href="css/diary.css" rel="stylesheet">
+
+    <script type="text/javascript" src="version.js"></script>
+    <script>
+      function myFunction() {
+        document.getElementById("versionInfo").innerHTML = browserDiaryVersion;
+	  }
+	</script>	
   </head>
   <body class="text-center" onload="baseLoad()">
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
@@ -117,11 +124,15 @@
   </main>
 
   <footer class="mastfoot mt-auto">
+    <div class="inner">
+		<p>V<b id="versionInfo"></b></p>
+	  </div>	  
   </footer>
 </div>
 </body>
 <script type="text/javascript">
 	function baseLoad() {
+		myFunction();
 		$('#datetimepicker1').datetimepicker({
 		    format: 'DD/MM/YYYY'
 		});

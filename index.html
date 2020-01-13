@@ -32,8 +32,15 @@
     </style>
     <!-- Custom styles for this template -->
     <link href="css/cover.css" rel="stylesheet">
+
+    <script type="text/javascript" src="version.js"></script>
+    <script>
+      function myFunction() {
+        document.getElementById("versionInfo").innerHTML = browserDiaryVersion;
+      }
+    </script>    
   </head>
-  <body class="text-center">
+  <body class="text-center" onload="myFunction()">
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="masthead mb-auto">
     <div class="inner">
@@ -71,7 +78,7 @@
 
   <footer class="mastfoot mt-auto">
     <div class="inner">
-      <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+      <p>V<b id="versionInfo"></b> , Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
     </div>
   </footer>
 </div>

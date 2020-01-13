@@ -1,0 +1,1 @@
+const browserDiaryVersion = "0.2.1";
