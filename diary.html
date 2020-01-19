@@ -34,7 +34,9 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>	
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />	
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	
     <!-- Custom styles for this template -->
     <link href="css/cover.css" rel="stylesheet">
@@ -74,20 +76,10 @@
 		  </div>
 		  <div class="col-xs-6 col-md-4">
 			<div class="form-group">
-				<div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-					<input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
-					<div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-						<div class="input-group-text"><i class="fa fa-calendar"></i></div>
-					</div>
+				<div class="input-group date" >
+					<input type="text" id="datetimepicker1">
 				</div>
 			</div>		
-			<script type="text/javascript">
-				$(function () {
-					$('#datetimepicker1').datetimepicker({
-						format: 'DD/MM/YYYY'					
-					});
-				});
-			</script>		
 		  </div>
 		  <div class="col-xs-6 col-md-4">
 			<a href="#" class="next round" title="tomorrow" onclick="dateTomorrow()">&#8250;</a>	  
@@ -133,8 +125,16 @@
 <script type="text/javascript">
 	function baseLoad() {
 		myFunction();
-		$('#datetimepicker1').datetimepicker({
-		    format: 'DD/MM/YYYY'
+		$('#datetimepicker1').datepicker({
+		    dateFormat: 'dd/mm/yy',
+			timepicker: false,
+			beforeShowDay: function(d) {
+				var res = compareToDiaryEntries(moment(d,"DD/MM/YYYY"));
+				if (res === null || res === undefined){
+					res = false;
+				}
+        		return [true, res  ? "my-class" : ""];
+			}			
 		});
 		loadFromStorage();
 		// auto-save 
@@ -236,11 +236,29 @@
 	
 	function diaryEntries(){
 		var tmp= Object.keys(localStorage).filter( k => moment(k,"DD/MM/YYYY").isValid() );
-		if (tmp==null || tmp === undefined){
+		if (tmp===null || tmp === undefined){
 			return tmp;
 		}
 		let sortedArray = tmp.sort((a, b) => moment(a,"DD/MM/YYYY").unix() - moment(b,"DD/MM/YYYY").unix())
 		return sortedArray;
+	}
+
+	function compareToDiaryEntries(d){
+		var entries = diaryEntries();
+		if (entries === null || entries === undefined){
+			return null;
+		}
+		//console.log("d => "+d);
+		var res = false;
+		entries.forEach(element => {
+			
+			if (moment(element,"DD/MM/YYYY").isSame(d)){
+				//console.log("true!")
+				res= true;
+				return;
+			}
+		});
+		return res;
 	}
 	
 	function save(){

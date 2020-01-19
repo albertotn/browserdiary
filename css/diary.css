@@ -15,3 +15,12 @@
 	font-variant: normal;
 	vertical-align: baseline;
 }
+
+
+#ui-datepicker-div {
+    background-color: #515151;
+}
+
+.my-class a {
+	background-color: rgb(255, 204, 0) !important;
+}
