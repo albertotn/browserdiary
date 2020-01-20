@@ -2,5 +2,5 @@
 
 - update version reference in version.js
 - create tag
-- push tag
+- push tag: git push origin
 - create release on github
