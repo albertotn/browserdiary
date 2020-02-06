@@ -136,8 +136,8 @@
 <script type="text/javascript">
 	function baseLoad() {
 		myFunction();
-		$('#datetimepicker1').datepicker({
-		    dateFormat: 'dd/mm/yy',
+		$('#datetimepicker1').datetimepicker({
+			format: 'DD/MM/YYYY',
 			timepicker: false,
 			beforeShowDay: function(d) {
 				var res = compareToDiaryEntries(moment(d,"DD/MM/YYYY"));
