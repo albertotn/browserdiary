@@ -11,6 +11,7 @@
   gtag('config', 'UA-156466678-1');
 </script>
 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -181,8 +182,20 @@
 	}
 	
 	function loadContent(lastDate){
+		var version = localStorage['version'];
+		if (version === undefined){
+			// encode legacy data to version 1
+			encodeLegacyToVersion1();
+		}
+
 		$('#datetimepicker1').datetimepicker('date',moment(lastDate,"DD/MM/YYYY"));	
-		var content = localStorage[lastDate];
+		var encoded = localStorage[lastDate];
+		if (encoded === undefined){
+			$("#diaryArea").val("");
+			return;
+		}
+		var content = undefined;
+		content = window.atob(encoded);
 		if (content !== null && content !== undefined){
 			$("#diaryArea").val(content);
 		} else {
@@ -241,10 +254,6 @@
 		}	
 	}
 	
-	function saveCurrentIndex(index){
-		localStorage["currentIndex"] = index;;
-	}	
-	
 	function diaryEntries(){
 		var tmp= Object.keys(localStorage).filter( k => moment(k,"DD/MM/YYYY").isValid() );
 		if (tmp===null || tmp === undefined){
@@ -272,15 +281,6 @@
 		return res;
 	}
 	
-	function save(){
-		// save current date
-		var lastDate = $('#datetimepicker1').datetimepicker('date').format("DD/MM/YYYY");
-		localStorage.lastDate = lastDate;
-		var value = $("#diaryArea").val();
-		localStorage[lastDate] = value;
-		console.log("data saved")
-	}
-	
 	function confirmDelete(){
 		var txt;
 		var r = confirm("Attention! Are you sure to delete all your diary?");
@@ -306,6 +306,34 @@
 		document.body.appendChild(downloadAnchorNode); // required for firefox
 		downloadAnchorNode.click();
 		downloadAnchorNode.remove();
+	}
+
+	function saveCurrentIndex(index){
+		encryptSave("currentIndex",index);
+	}
+	
+	function save(){
+		// save current date
+		var lastDate = $('#datetimepicker1').datetimepicker('date').format("DD/MM/YYYY");
+		localStorage.lastDate = lastDate;
+		var value = $("#diaryArea").val();
+		localStorage[lastDate] = value;
+		encryptSave(lastDate,value);
+		console.log("data saved")
+	}
+
+	function encryptSave(key,data){
+		var encoded = window.btoa(data)
+		localStorage[key] = encoded;
+	}
+
+	function encodeLegacyToVersion1() {
+		var tmp= Object.keys(localStorage).filter( k => moment(k,"DD/MM/YYYY").isValid() );
+		if (tmp===null || tmp === undefined){
+			return;
+		}
+		tmp.forEach(k => encryptSave(k,localStorage[k]));
+		localStorage['version'] = 1;
 	}
 
 </script>
