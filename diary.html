@@ -186,6 +186,8 @@
 		if (version === undefined){
 			// encode legacy data to version 1
 			encodeLegacyToVersion1();
+		} else if (version === 1){
+			migrateToVersion2();
 		}
 
 		$('#datetimepicker1').datetimepicker('date',moment(lastDate,"DD/MM/YYYY"));	
@@ -220,7 +222,7 @@
 			return;
 		}
 		let entryIndex = getCurrentIndex();
-		if (entryIndex == null){
+		if (entryIndex === null || entryIndex === undefined || entryIndex === ''){
 			saveCurrentIndex(entries.length);
 			return;
 		}
@@ -309,7 +311,7 @@
 	}
 
 	function saveCurrentIndex(index){
-		encryptSave("currentIndex",index);
+		localStorage["currentIndex"] =index;
 	}
 	
 	function save(){
@@ -334,6 +336,11 @@
 		}
 		tmp.forEach(k => encryptSave(k,localStorage[k]));
 		localStorage['version'] = 1;
+	}
+
+	function migrateToVersion2(){
+		localStorage['currentIndex'] = 0;
+		localStorage['version'] = 2;
 	}
 
 </script>
