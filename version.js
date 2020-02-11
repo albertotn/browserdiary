@@ -1,1 +1,1 @@
-const browserDiaryVersion = "0.3.1";
+const browserDiaryVersion = "0.4.0";
