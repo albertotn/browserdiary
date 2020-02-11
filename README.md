@@ -20,7 +20,7 @@ Following list will change in future, but for now is aim for a full 1.0 version:
 - [x] your data, your content: your diary will not be stored online
 - [x] focus on semplicity: clean and simple ui
 - [x] ~~encryption: only you will access to your data~~ as simple experiment I've decided to simply hash diary entries
-- [ ] analyze your diary: local analytics to help you visualize, learn and think using your diary
+- [x] analyze your diary: ~~local analytics to help you visualize, learn and think using your diary~~ as simple experiment I've decided to do some simple analytics nothing fancy
  
 ## Principles
 
