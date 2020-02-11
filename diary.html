@@ -122,6 +122,16 @@
 				<button type="button" class="btn btn-danger" onclick="exportDiary()">Export diary</button>							
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-xs-6 col-md-4">
+			</div>
+			<div class="col-xs-6 col-md-4">
+				<div id="diaryStats">
+				</div>
+			</div>						
+			<div class="col-xs-6 col-md-4">
+			</div>
+		</div>		
 	</div>	
   </div>
   </main>
@@ -161,6 +171,8 @@
 				$('#savingIndicator').hide();
 			}, 3000);
 		});
+
+		loadBaseStats();
 	}
 	
 	function dateYesterday(){
@@ -331,7 +343,7 @@
 
 	function encodeLegacyToVersion1() {
 		var tmp= Object.keys(localStorage).filter( k => moment(k,"DD/MM/YYYY").isValid() );
-		if (tmp===null || tmp === undefined){
+		if (tmp === null || tmp === undefined){
 			return;
 		}
 		tmp.forEach(k => encryptSave(k,localStorage[k]));
@@ -341,6 +353,60 @@
 	function migrateToVersion2(){
 		localStorage['currentIndex'] = 0;
 		localStorage['version'] = 2;
+	}
+
+	function loadBaseStats(){
+		var stats = {};
+		// total entries
+		var tmp= Object.keys(localStorage).filter( k => moment(k,"DD/MM/YYYY").isValid() );
+		if (tmp === null || tmp === undefined){
+			stats.totalEntries = 0;
+		} else {
+			stats.totalEntries = tmp.length;
+		}
+		// average length
+		var sum = 0;
+		tmp.forEach(k => sum+=entryLength(localStorage[k]) )
+		if (stats.totalEntries === 0){
+			stats.avgLength = 0;	
+		} else {
+			stats.avgLength = sum / stats.totalEntries;
+		}
+		// word frequencies
+		var freqMap = {};
+		tmp.forEach(k => wordFreq( window.atob(localStorage[k]), freqMap));
+		stats.mostUsedWord = getMostUsed(freqMap);
+		$('#diaryStats').text("Total entries "+stats.totalEntries+" , average length "+stats.avgLength+" and most used word: "+stats.mostUsedWord);
+	}
+
+	function entryLength(entry){
+		if (entry === null || entry === undefined){
+			return 0;
+		}
+		var content = window.atob(entry);
+		return content.length;
+	}
+
+	function wordFreq(string,freqMap) {
+		if (string === null || string === undefined){
+			return freqMap;
+		}
+		var words = string.replace(/[.]/g, '').split(/\s/);
+		words.forEach(w => {
+			if (!freqMap[w]) {
+				freqMap[w] = 0;
+			}
+			freqMap[w] += 1;
+		});
+
+		return freqMap;
+	}	
+
+	function getMostUsed(freqMap){
+		if (freqMap === null || freqMap === undefined){
+			return "";
+		}
+		return Object.keys(freqMap).reduce((a, b) => freqMap[a] > freqMap[b] ? a : b);
 	}
 
 </script>
